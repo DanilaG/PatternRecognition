@@ -2,15 +2,14 @@
 #define LAB1_1_PROBABILITYCOUNTER_H
 
 #include <array>
+#include <random>
 #include <vector>
 
 class ProbabilityCounter {
   public:
-    typedef int value_type;
+    typedef unsigned int value_type;
 
-    ProbabilityCounter(unsigned int digit_capacity) {
-        refill_numbers(digit_capacity);
-    }
+    ProbabilityCounter(unsigned int digit_capacity);
 
     value_type next();
 
@@ -21,21 +20,20 @@ class ProbabilityCounter {
     };
 
   protected:
-    void refill_numbers(unsigned int digit_capacity);
-
     virtual bool is_suitable(value_type number) const = 0;
 
     std::array<unsigned int, 10> matches(value_type number) const;
 
-    std::vector<value_type> numbers_;
+    std::mt19937 gen_;
+    std::uniform_int_distribution<value_type> dis_;
     unsigned int numbers_count_ = 0U;
     unsigned int suitable_count_ = 0U;
     unsigned int digit_capacity_ = 0U;
 };
 
-class UniqProbabilityCounter : public ProbabilityCounter {
+class UniqueProbabilityCounter : public ProbabilityCounter {
   public:
-    UniqProbabilityCounter(unsigned int digit_capacity)
+    UniqueProbabilityCounter(unsigned int digit_capacity)
         : ProbabilityCounter(digit_capacity) {}
 
   protected:
