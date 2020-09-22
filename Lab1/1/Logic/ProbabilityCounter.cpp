@@ -7,6 +7,9 @@
 ProbabilityCounter::ProbabilityCounter(unsigned int digit_capacity)
     : digit_capacity_(digit_capacity), gen_(std::random_device()()) {
     double power = pow(10, digit_capacity_);
+    if (power > std::numeric_limits<value_type>::max()) {
+        std::invalid_argument("Wrong digit capacity!");
+    }
     dis_ = std::uniform_int_distribution<value_type>(0, power);
 }
 
