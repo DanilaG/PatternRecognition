@@ -18,6 +18,8 @@ class MainWindow : public QMainWindow {
     bool save_config();
     bool load_config();
 
+    const double analytic_ans = 1 - sqrt(3) / 2.0;
+
   private slots:
     void on_CountButton_clicked();
 
