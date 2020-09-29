@@ -7,10 +7,21 @@
 #include "Logic/Logic.h"
 #include "ui_MainWindow.h"
 
+#define SET_ANS(NUMBER, RADIUS)                                       \
+    {                                                                 \
+        const unsigned int number_attempts =                          \
+            ui->Attempt##NUMBER##SpinBox->value();                    \
+        const double probability =                                    \
+            calculate_probability({{0, 0}, RADIUS}, number_attempts); \
+        ui->Ans##NUMBER##Lable->setNum(probability);                  \
+        ui->Misc##NUMBER##Lable->setNum(analytic_ans - probability);  \
+    }
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     load_config();
+    ui->AnalyticAnsLabel->setNum(analytic_ans);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -22,7 +33,9 @@ bool MainWindow::save_config() {
         return false;
     }
 
-    QJsonObject json({{"Attempt", ui->AttemptSpinBox->value()},
+    QJsonObject json({{"Attempt1", ui->Attempt1SpinBox->value()},
+                      {"Attempt2", ui->Attempt2SpinBox->value()},
+                      {"Attempt3", ui->Attempt3SpinBox->value()},
                       {"Radius", ui->RadiusSpinBox->value()}});
     config.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
 
@@ -38,7 +51,9 @@ bool MainWindow::load_config() {
     }
 
     QJsonObject json = QJsonDocument::fromJson(config.readAll()).object();
-    ui->AttemptSpinBox->setValue(json["Attempt"].toInt());
+    ui->Attempt1SpinBox->setValue(json["Attempt1"].toInt());
+    ui->Attempt2SpinBox->setValue(json["Attempt2"].toInt());
+    ui->Attempt3SpinBox->setValue(json["Attempt3"].toInt());
     ui->RadiusSpinBox->setValue(json["Radius"].toInt());
 
     config.close();
@@ -46,11 +61,11 @@ bool MainWindow::load_config() {
 }
 
 void MainWindow::on_CountButton_clicked() {
-    const unsigned int number_attempts = ui->AttemptSpinBox->value();
     const double radius = ui->RadiusSpinBox->value();
 
-    const double probability = calculate_probability({{0, 0}, radius}, number_attempts);
-    ui->AnswerLabel->setNum(probability);
+    SET_ANS(1, radius);
+    SET_ANS(2, radius);
+    SET_ANS(3, radius);
 
     save_config();
 }
