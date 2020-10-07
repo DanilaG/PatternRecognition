@@ -1,0 +1,14 @@
+BasedOnStyle: Google
+
+AccessModifierOffset: -2
+AlignAfterOpenBracket: Align
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: true
+BinPackArguments: false
+BinPackParameters: false
+ColumnLimit: 80
+DerivePointerAlignment: false
+PointerAlignment: Left
+IndentWidth: 4
+TabWidth: 4
